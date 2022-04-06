@@ -2,6 +2,7 @@ package com.example.viewpagertest
 
 import android.content.Context
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -40,10 +41,16 @@ class pictureAdapter(val picturelist: List<Photo>): PagerAdapter(){
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val imageview = ImageView(container.context)
-        imageview.setImageResource(picturelist[position%picturelist.size].imgid);//设置图片
+        /*val imageview = ImageView(container.context)
+        imageview.setImageResource(picturelist[position%picturelist.size].imgid)//设置图片
         container.addView(imageview)
-        return imageview
+        return imageview*/
+        val view = LayoutInflater.from(container.context)
+            .inflate(R.layout.slideshow_item,container,false)
+        val imageview:ImageView = view.findViewById(R.id.imageview)
+        imageview.setImageResource(picturelist[position%picturelist.size].imgid)//设置图片
+        container.addView(view)//添加布局
+        return view
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

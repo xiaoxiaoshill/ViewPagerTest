@@ -6,7 +6,11 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Message
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.viewpager.widget.ViewPager
+import java.lang.Exception
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(){
@@ -17,17 +21,30 @@ class MainActivity : AppCompatActivity(){
         val viewpager:ViewPager = findViewById(R.id.viewpager)
         viewpager.adapter = PhotoAdapter()
     }*/
-
+    private var isRunning:Boolean = false
     private val picturelist = ArrayList<Photo>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initpicture()//初始化数据
+        initdot()
         val viewpager:ViewPager = findViewById(R.id.viewpager)
         viewpager.adapter = pictureAdapter(picturelist)
         viewpager.setCurrentItem(1000*picturelist.size)
+        Thread(){//设置自动轮播
+            isRunning = true
+            while (isRunning){
+                try {
+                    Thread.sleep(3500)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+                    runOnUiThread(Runnable {
+                        viewpager.setCurrentItem(viewpager.currentItem + 1)
+                    })
+            }
+        }.start()
     }
-
 
     private fun initpicture(){
         picturelist.add(Photo(R.drawable.img4))
@@ -35,6 +52,22 @@ class MainActivity : AppCompatActivity(){
         picturelist.add(Photo(R.drawable.img1))
         picturelist.add(Photo(R.drawable.img4))
         picturelist.add(Photo(R.drawable.img))
+    }
+
+    private fun initdot(){
+        /*设置小圆点*/
+        val imgview = ImageView(this)
+        val dotlay:ViewGroup = findViewById(R.id.dotlay)
+        for (i in picturelist.indices){
+            imgview.setImageResource(R.drawable.dot)//设置小圆点图标
+            val layout = LinearLayout.LayoutParams(8,8)
+            if (i != 0){
+                layout.leftMargin = 10
+            }
+            imgview.setEnabled(false)//默认暗色
+            Log.d("dot",i.toString())
+        }
+        dotlay.addView(imgview)
     }
 
 }
