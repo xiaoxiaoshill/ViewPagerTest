@@ -6,9 +6,12 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Message
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager.widget.ViewPager
 import java.lang.Exception
 import kotlin.collections.ArrayList
@@ -27,7 +30,6 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initpicture()//初始化数据
-        initdot()
         val viewpager:ViewPager = findViewById(R.id.viewpager)
         viewpager.adapter = pictureAdapter(picturelist)
         viewpager.setCurrentItem(1000*picturelist.size)
@@ -53,23 +55,6 @@ class MainActivity : AppCompatActivity(){
         picturelist.add(Photo(R.drawable.img4))
         picturelist.add(Photo(R.drawable.img))
     }
-
-    private fun initdot(){
-        /*设置小圆点*/
-        val imgview = ImageView(this)
-        val dotlay:ViewGroup = findViewById(R.id.dotlay)
-        for (i in picturelist.indices){
-            imgview.setImageResource(R.drawable.dot)//设置小圆点图标
-            val layout = LinearLayout.LayoutParams(8,8)
-            if (i != 0){
-                layout.leftMargin = 10
-            }
-            imgview.setEnabled(false)//默认暗色
-            Log.d("dot",i.toString())
-        }
-        dotlay.addView(imgview)
-    }
-
 }
 
 
